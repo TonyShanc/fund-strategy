@@ -1,0 +1,40 @@
+myStrategies:
+- code: "420102"
+  subStrategies:
+  - span: 7
+    border:
+      min: -1
+    msg: "天弘永利债券基金一周内跌幅超过1个点，记得加仓哟"
+
+- code: "519697"
+  subStrategies:
+  - span: 7
+    border:
+      min: -2
+    msg: "交银优势行业混合一周内跌幅超过2个点，记得加仓哟"
+  - span: 30
+    border:
+      max: 4
+    msg: "交银优势行业混合一个月内涨幅超过4个点，记得减仓哟"
+
+- code: "400015"
+  subStrategies:
+  - span: 365
+    border:
+      max: 50
+  - span: 182
+    detectHPM:
+      min: -20
+      max: 15
+  msg: "东方新能源汽车主题混合去年涨幅超过50%，半年内在负20个点和15个点之间振荡，先别买入哟"
+
+- code: "164402"
+  subStrategies:
+  - span: 30
+    border:
+      min: -10
+    msg: "前海开源中航军工指数一个月内跌了10个点，建议买入哟"
+  - span: 30
+    border:
+      max: 10
+    msg: "前海开源中航军工指数一个月内涨了10个点，建议卖出哟"
