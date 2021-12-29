@@ -2,40 +2,61 @@ package tools
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"regexp"
 	"time"
 
 	"github.com/sirupsen/logrus"
 )
 
-const (
+var (
 	baseUrl    = "https://fundf10.eastmoney.com/F10DataApi.aspx?type=lsjz&"
 	timeFormat = "2006-01-02"
-	pageSize = 20
+	pageSize   = 20
+	now        = time.Now()
 )
 
-func Get(span int) {
-
-	baseUrl := "https://fundf10.eastmoney.com/F10DataApi.aspx?type=lsjz&code=400015&page=1&per=20&sdate=2021-09-10&edate=2021-12-25"
+func GetHtmls(code string, span int) []string {
+	var htmls []string
 
 	// start date
-	from := time.Now().Add(time.Hour *24 * time.Duration(span) * -1 ).Format(timeFormat)
+	from := now.AddDate(0, 0, -1 * (span - 1)).Format(timeFormat)
 	// today
-	to := time.Now().Format(timeFormat)
+	to := now.Format(timeFormat)
 
 	pageNo := 1
 	for {
-		param := fmt.Sprintf("page=%d&per=%d&sdate=%s&edate=%s", pageNo, pageSize, from, to)
+		param := fmt.Sprintf("code=%s&page=%d&per=%d&sdate=%s&edate=%s", code, pageNo, pageSize, from, to)
 		resp, err := http.Get(baseUrl + param)
 		if err != nil {
 			logrus.Error(err)
 			break
 		}
-		parse(resp)
+		defer resp.Body.Close()
 
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			logrus.Warnf("can not read body, err: %s", err.Error())
+		}
+
+		bodyString := string(bodyBytes)
+		html := getHtmlFromRaw(bodyString)
+		if isEmpty(html) {
+			break
+		}
+
+		htmls = append(htmls, html)
+		pageNo += 1
 	}
 
+	return htmls
+}
 
+func isEmpty(rawHtml string) bool {
+	matched, _ := regexp.MatchString("暂无数据", rawHtml)
+
+	return matched
 }
 
 func isWeekend(t time.Time) bool {
@@ -47,4 +68,8 @@ func isWeekend(t time.Time) bool {
 		return true
 	}
 	return false
+}
+
+func setNowTimeForTest(t time.Time) {
+	now = t
 }
