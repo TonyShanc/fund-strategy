@@ -43,8 +43,8 @@ myStrategies:       # 策略集合
 ```
 
 
-## 使用者注意事项
-本工具只提供命令行内的标准输出，不打算嵌入定时计算、微信公众号、邮箱通知等功能。
+## 注意事项
+该工具后续更新致力于提供更丰富的可配置策略，不打算横向扩展，如嵌入定时计算、微信公众号、邮箱通知等功能。
 
 如果你想定时计算，可以考虑使用[Github Action](https://docs.github.com/en/actions) + [Crontab](https://crontab.guru/)
 
