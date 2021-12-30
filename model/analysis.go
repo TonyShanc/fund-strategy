@@ -9,9 +9,9 @@ type Analysis struct {
 	// Code is fund code
 	Code string
 
-	BorderAnalysis []BorderAnalysis
+	BorderAnalysis *BorderAnalysis
 
-	HPMAnalysis []HPMAnalysis
+	HPMAnalysis *HPMAnalysis
 
 	// Msg is what we should be noticed. If all results reach their
 	// thresholds, msg will be sent.
@@ -19,58 +19,48 @@ type Analysis struct {
 }
 
 type BorderAnalysis struct {
-	Span     int
 	Border   *Border
+	Data 	[]float32
 	IfEscape bool
 }
 
 // Horizontal Price Movement detection, 横盘分析
 type HPMAnalysis struct {
-	Span int
-	*DetectHPM
+	DetectHPM *DetectHPM
+	Data []float32
 	IfHPM bool
 }
 
-func (ana *Analysis) Analyze() (ifNotice bool) {
+func (ana *Analysis) Analyze() bool {
 	ana.borderAnalyze()
-	for _, ba := range ana.BorderAnalysis {
-		ifNotice = ifNotice && ba.IfEscape
-	}
-
 	ana.hpmAnalyze()
-	for _, ha := range ana.HPMAnalysis {
-		ifNotice = ifNotice && ha.IfHPM
-	}
-
-	return
+	return ana.BorderAnalysis.IfEscape && ana.HPMAnalysis.IfHPM
 }
 
 func (ana *Analysis) borderAnalyze() {
-	for _, ba := range ana.BorderAnalysis {
-		incomePercentages := calIncomePercentages(ana.Code, ba.Span)
+	ba := ana.BorderAnalysis
+	incomePercentages := calIncomePercentages(ana.Code, ba.Border.Span)
+	ba.Data = incomePercentages
 
-		var sum float32
-		for _, ip := range incomePercentages {
-			sum += ip
-		}
-
-		ba.IfEscape = (ba.Border.Max != 0 && sum >= ba.Border.Max) || (ba.Border.Min != 0 && sum <= ba.Border.Min)
+	var sum float32
+	for _, ip := range incomePercentages {
+		sum += ip
 	}
+
+	ba.IfEscape = (ba.Border.Max != 0 && sum >= ba.Border.Max) || (ba.Border.Min != 0 && sum <= ba.Border.Min)
 }
 
-// TODO(tonyshanc): Maybe partial scope's change matters. Calculate partial scope's growth instead whole scope.
+// TODO(tonyshanc): Maybe partial scope's change matters. Check partial scope's growth instead whole scope.
 func (ana *Analysis) hpmAnalyze() {
+	ha := ana.HPMAnalysis
+	incomePercentages := calIncomePercentages(ana.Code, ha.DetectHPM.Span)
 
-	for _, ha := range ana.HPMAnalysis {
-		incomePercentages := calIncomePercentages(ana.Code, ha.Span)
-
-		var sum float32
-		for _, ip := range incomePercentages {
-			sum += ip
-		}
-
-		ha.IfHPM = (sum >= ha.Min && sum <= ha.Max)
+	var sum float32
+	for _, ip := range incomePercentages {
+		sum += ip
 	}
+
+	ha.IfHPM = (sum >= ha.DetectHPM.Min && sum <= ha.DetectHPM.Max)
 }
 
 func calIncomePercentages(code string, span int) (incomePercentages []float32) {

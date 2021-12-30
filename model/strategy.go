@@ -9,7 +9,6 @@ import (
 )
 
 type SubStrategy struct {
-	Span      int        `yaml:"span"`
 	Border    *Border    `yaml:"border"`
 	DetectHPM *DetectHPM `yaml:"detectHPM"`
 	Msg       string     `yaml:"msg"`
@@ -26,6 +25,7 @@ type MyStrategies struct {
 }
 
 type DetectHPM struct {
+	Span int
 	// Notice: default zero if unset.
 	Min float32 `yaml:"min"`
 	// Notice: default zero if unset.
@@ -34,6 +34,7 @@ type DetectHPM struct {
 
 // Border represent min and max income percentage we set.
 type Border struct {
+	Span int
 	// Notice: Zero is invalid value.
 	Min float32
 	// Notice: Zero is invalid value.
@@ -63,46 +64,30 @@ func GetStrategy() *MyStrategies {
 func (s *Strategy) genAnalysis() []Analysis {
 	anaSlice := []Analysis{}
 
-	rootAnalysis := Analysis{
-		Code: s.Code,
-		Msg:  s.Msg,
-	}
-
-	for _, stra := range s.SubStrategies {
+	for _, subStra := range s.SubStrategies {
 		subAna := Analysis{
 			Code: s.Code,
-			Msg:  stra.Msg,
+			Msg:  subStra.Msg,
 		}
 
-		if stra.Border != nil {
-			ba := BorderAnalysis{
-				Span:   stra.Span,
-				Border: stra.Border,
+		if subStra.Border != nil {
+			subAna.BorderAnalysis = &BorderAnalysis{
+				Border: subStra.Border,
 			}
-			rootAnalysis.BorderAnalysis = append(rootAnalysis.BorderAnalysis, ba)
-			subAna.BorderAnalysis = append(subAna.BorderAnalysis, ba)
 		}
 
-		if stra.DetectHPM != nil {
-			ha := HPMAnalysis{
-				Span:      stra.Span,
-				DetectHPM: stra.DetectHPM,
+		if subStra.DetectHPM != nil {
+			subAna.HPMAnalysis = &HPMAnalysis{
+				DetectHPM: subStra.DetectHPM,
 			}
-			rootAnalysis.HPMAnalysis = append(rootAnalysis.HPMAnalysis, ha)
-			subAna.HPMAnalysis = append(subAna.HPMAnalysis, ha)
 		}
 
 		// reduce meaningless request
-		if stra.Msg == "" {
+		if subStra.Msg == "" {
 			continue
 		}
 
 		anaSlice = append(anaSlice, subAna)
-	}
-
-	// reduce meaningless request
-	if rootAnalysis.Msg != "" {
-		anaSlice = append(anaSlice, rootAnalysis)
 	}
 
 	return anaSlice

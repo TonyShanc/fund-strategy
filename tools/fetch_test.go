@@ -59,7 +59,7 @@ func TestGetHtmls(t *testing.T) {
 	)
 
 	for _, tt := range tests {
-		setNowTimeForTest(tt.Now)
+		SetNowTimeForTest(tt.Now)
 		assert.Equal(t, tt.Expect, GetHtmls(tt.Code, tt.Span))
 	}
 }

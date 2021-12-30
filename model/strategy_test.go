@@ -21,24 +21,23 @@ func TestGenAnalysis(t *testing.T) {
 					Code: "420102",
 					SubStrategies: []SubStrategy{
 						{
-							Span: 7,
 							Border: &Border{
-								Min: -1,
+								Span: 7,
+								Min:  -1,
 							},
+							Msg: "天弘永利债券基金一周内跌幅超过1个点，记得加仓哟",
 						},
 					},
-					Msg: "天弘永利债券基金一周内跌幅超过1个点，记得加仓哟",
 				},
 
 				Expect: []Analysis{
 					{
 						Code: "420102",
-						BorderAnalysis: []BorderAnalysis{
-							{
+						BorderAnalysis: &BorderAnalysis{
+
+							Border: &Border{
 								Span: 7,
-								Border: &Border{
-									Min: -1,
-								},
+								Min:  -1,
 							},
 						},
 						Msg: "天弘永利债券基金一周内跌幅超过1个点，记得加仓哟",
@@ -50,55 +49,36 @@ func TestGenAnalysis(t *testing.T) {
 					Code: "400015",
 					SubStrategies: []SubStrategy{
 						{
-							Span: 365,
 							Border: &Border{
-								Max: 50,
+								Span: 365,
+								Max:  50,
 							},
-							Msg: "东方新能源汽车主题混合去年涨幅超过50%，买入需谨慎",
-						},
-						{
-							Span: 182,
 							DetectHPM: &DetectHPM{
-								Min: -20,
-								Max: 15,
+								Span: 182,
+								Min:  -20,
+								Max:  15,
 							},
+							Msg: "东方新能源汽车主题混合去年涨幅超过50%, 过去半年在负20个点和15个点之间振荡，值得关注",
 						},
 					},
-					Msg: "东方新能源汽车主题混合去年涨幅超过50%，半年内在负20个点和15个点之间振荡，先别买入哟",
 				},
 				Expect: []Analysis{
 					{
 						Code: "400015",
-						BorderAnalysis: []BorderAnalysis{
-							{
+						BorderAnalysis: &BorderAnalysis{
+							Border: &Border{
 								Span: 365,
-								Border: &Border{
-									Max: 50,
-								},
+								Max:  50,
 							},
 						},
-						Msg: "东方新能源汽车主题混合去年涨幅超过50%，买入需谨慎",
-					},
-					{
-						Code: "400015",
-						BorderAnalysis: []BorderAnalysis{
-							{
-								Span: 365,
-								Border: &Border{
-									Max: 50,
-								},
-							},
-						},
-						HPMAnalysis: []HPMAnalysis{
-							{
+						HPMAnalysis: &HPMAnalysis{
+							DetectHPM: &DetectHPM{
 								Span: 182,
-								DetectHPM: &DetectHPM{
-									Min: -20,
-									Max: 15,
-								},
+								Min:  -20,
+								Max:  15,
 							},
 						},
-						Msg: "东方新能源汽车主题混合去年涨幅超过50%，半年内在负20个点和15个点之间振荡，先别买入哟",
+						Msg: "东方新能源汽车主题混合去年涨幅超过50%, 过去半年在负20个点和15个点之间振荡，值得关注",
 					},
 				},
 			},

@@ -70,6 +70,6 @@ func isWeekend(t time.Time) bool {
 	return false
 }
 
-func setNowTimeForTest(t time.Time) {
+func SetNowTimeForTest(t time.Time) {
 	now = t
 }
