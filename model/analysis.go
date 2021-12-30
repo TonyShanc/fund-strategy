@@ -19,16 +19,16 @@ type Analysis struct {
 }
 
 type BorderAnalysis struct {
-	Border   *Border
-	Data     []float32
-	IfEscape bool
+	Border            *Border
+	IncomePercentages []float32
+	IfEscape          bool
 }
 
 // Horizontal Price Movement detection, 横盘分析
 type HPMAnalysis struct {
-	DetectHPM *DetectHPM
-	Data      []float32
-	IfHPM     bool
+	DetectHPM         *DetectHPM
+	IncomePercentages []float32
+	IfHPM             bool
 }
 
 func (ana *Analysis) Analyze() bool {
@@ -55,10 +55,10 @@ func (ana *Analysis) borderAnalyze() {
 	}
 
 	ba := ana.BorderAnalysis
-	ba.Data = calIncomePercentages(ana.Code, ba.Border.Span)
+	ba.IncomePercentages = calIncomePercentages(ana.Code, ba.Border.Span)
 
 	var sum float32
-	for _, ip := range ba.Data {
+	for _, ip := range ba.IncomePercentages {
 		sum += ip
 	}
 
@@ -72,14 +72,17 @@ func (ana *Analysis) hpmAnalyze() {
 	}
 
 	ha := ana.HPMAnalysis
-	ha.Data = calIncomePercentages(ana.Code, ha.DetectHPM.Span)
+	ha.IncomePercentages = calIncomePercentages(ana.Code, ha.DetectHPM.Span)
 
 	var sum float32
-	for _, ip := range ha.Data {
+	for _, ip := range ha.IncomePercentages {
 		sum += ip
+		if sum >= ha.DetectHPM.Min && sum <= ha.DetectHPM.Max {
+			return
+		}
 	}
 
-	ha.IfHPM = (sum >= ha.DetectHPM.Min && sum <= ha.DetectHPM.Max)
+	ha.IfHPM = true
 }
 
 func calIncomePercentages(code string, span int) (incomePercentages []float32) {

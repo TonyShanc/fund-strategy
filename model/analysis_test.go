@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
@@ -59,7 +58,6 @@ func TestAnalyze(t *testing.T) {
 
 	for _, tt := range tests {
 		tools.SetNowTimeForTest(tt.Now)
-		fmt.Println(tt.Now)
 		assert.Equal(t, tt.Expect, tt.Ana.Analyze())
 	}
 }
