@@ -24,6 +24,7 @@ type BorderAnalysis struct {
 	IfEscape bool
 }
 
+// Horizontal Price Movement detection, 横盘分析
 type HPMAnalysis struct {
 	Span int
 	*DetectHPM
