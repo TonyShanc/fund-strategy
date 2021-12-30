@@ -65,7 +65,7 @@ func (ana *Analysis) borderAnalyze() {
 	ba.IfEscape = (ba.Border.Max != 0 && sum >= ba.Border.Max) || (ba.Border.Min != 0 && sum <= ba.Border.Min)
 }
 
-// TODO(tonyshanc): Maybe partial scope's change matters. Check partial scope's growth instead whole scope.
+// TODO(tonyshanc): Maybe partial scope's change matters. Check partial scope's growth instead of whole scope.
 func (ana *Analysis) hpmAnalyze() {
 	if ana.HPMAnalysis == nil {
 		return
@@ -77,7 +77,7 @@ func (ana *Analysis) hpmAnalyze() {
 	var sum float32
 	for _, ip := range ha.IncomePercentages {
 		sum += ip
-		if sum >= ha.DetectHPM.Min && sum <= ha.DetectHPM.Max {
+		if sum <= ha.DetectHPM.Min && sum >= ha.DetectHPM.Max {
 			return
 		}
 	}
