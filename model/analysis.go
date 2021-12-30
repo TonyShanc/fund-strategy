@@ -36,6 +36,7 @@ func (ana *Analysis) Analyze() bool {
 		borderAnalyzeResult = true
 		hpmAnalyzeResult    = true
 	)
+
 	ana.borderAnalyze()
 	if ana.BorderAnalysis != nil {
 		borderAnalyzeResult = ana.BorderAnalysis.IfEscape
