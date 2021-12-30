@@ -44,7 +44,7 @@ var (
 	myStrategies *MyStrategies
 )
 
-func GetStrategy() *MyStrategies {
+func LoadStrategy() *MyStrategies {
 	if myStrategies != nil {
 		return myStrategies
 	}

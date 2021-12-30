@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetStrategy(t *testing.T) {
-	GetStrategy()
+	LoadStrategy()
 }
 
 func TestGenAnalysis(t *testing.T) {
