@@ -49,7 +49,7 @@ func LoadStrategy() *MyStrategies {
 		return myStrategies
 	}
 
-	yamlFile, err := ioutil.ReadFile("../example/strategy.yaml")
+	yamlFile, err := ioutil.ReadFile("example/strategy.yaml")
 	if err != nil {
 		log.Fatalf("read yaml file err: %v", err)
 	}
@@ -59,7 +59,7 @@ func LoadStrategy() *MyStrategies {
 	return myStrategies
 }
 
-func (s *Strategy) genAnalysis() []Analysis {
+func (s *Strategy) GenAnalysis() []Analysis {
 	anaSlice := []Analysis{}
 
 	for _, subStra := range s.SubStrategies {

@@ -6,10 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetStrategy(t *testing.T) {
-	LoadStrategy()
-}
-
 func TestGenAnalysis(t *testing.T) {
 	var (
 		tests = []struct {
@@ -86,6 +82,6 @@ func TestGenAnalysis(t *testing.T) {
 	)
 
 	for _, tt := range tests {
-		assert.Equal(t, tt.Expect, tt.Stra.genAnalysis())
+		assert.Equal(t, tt.Expect, tt.Stra.GenAnalysis())
 	}
 }
