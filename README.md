@@ -35,7 +35,7 @@ myStrategies:       # 策略集合
   - border:         # 一条策略，当所有阈值配置都被满足时，才会输出消息
       span: 365
       max: 50
-    detectHPM:      # 横盘检测, 超出范围时输出消息
+    detectHPM:      # 横盘检测, 跨度内涨幅之和始终在范围内时输出消息
       span: 182     
       min: -20      
       max: 15
