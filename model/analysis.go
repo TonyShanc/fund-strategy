@@ -32,12 +32,11 @@ type HPMAnalysis struct {
 
 func (ana *Analysis) Analyze() (ifNotice bool) {
 	ana.borderAnalyze()
-	ana.hpmAnalyze()
-
 	for _, ba := range ana.BorderAnalysis {
 		ifNotice = ifNotice && ba.IfEscape
 	}
 
+	ana.hpmAnalyze()
 	for _, ha := range ana.HPMAnalysis {
 		ifNotice = ifNotice && ha.IfHPM
 	}
