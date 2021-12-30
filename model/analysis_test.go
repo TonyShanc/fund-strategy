@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -38,11 +39,27 @@ func TestAnalyze(t *testing.T) {
 
 				Expect: false,
 			},
+			{
+				// 2021-12-28
+				Now: time.Date(2021, time.December, 28, 0, 0, 0, 0, time.Local),
+				Ana: Analysis{
+					Code: "400015",
+					BorderAnalysis: &BorderAnalysis{
+						Border: &Border{
+							Span: 365,
+							Max:  50,
+						},
+					},
+					Msg: "东方新能源混合去年涨幅超过50个点，请关注",
+				},
+				Expect: true,
+			},
 		}
 	)
 
 	for _, tt := range tests {
 		tools.SetNowTimeForTest(tt.Now)
+		fmt.Println(tt.Now)
 		assert.Equal(t, tt.Expect, tt.Ana.Analyze())
 	}
 }

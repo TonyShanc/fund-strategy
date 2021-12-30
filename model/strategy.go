@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -51,7 +50,6 @@ func GetStrategy() *MyStrategies {
 	}
 
 	yamlFile, err := ioutil.ReadFile("../example/strategy.yaml")
-	fmt.Println(string(yamlFile))
 	if err != nil {
 		log.Fatalf("read yaml file err: %v", err)
 	}

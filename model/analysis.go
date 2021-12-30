@@ -20,30 +20,45 @@ type Analysis struct {
 
 type BorderAnalysis struct {
 	Border   *Border
-	Data 	[]float32
+	Data     []float32
 	IfEscape bool
 }
 
 // Horizontal Price Movement detection, 横盘分析
 type HPMAnalysis struct {
 	DetectHPM *DetectHPM
-	Data []float32
-	IfHPM bool
+	Data      []float32
+	IfHPM     bool
 }
 
 func (ana *Analysis) Analyze() bool {
+	var (
+		borderAnalyzeResult = true
+		hpmAnalyzeResult    = true
+	)
 	ana.borderAnalyze()
+	if ana.BorderAnalysis != nil {
+		borderAnalyzeResult = ana.BorderAnalysis.IfEscape
+	}
+
 	ana.hpmAnalyze()
-	return ana.BorderAnalysis.IfEscape && ana.HPMAnalysis.IfHPM
+	if ana.HPMAnalysis != nil {
+		hpmAnalyzeResult = ana.HPMAnalysis.IfHPM
+	}
+
+	return borderAnalyzeResult && hpmAnalyzeResult
 }
 
 func (ana *Analysis) borderAnalyze() {
+	if ana.BorderAnalysis == nil {
+		return
+	}
+
 	ba := ana.BorderAnalysis
-	incomePercentages := calIncomePercentages(ana.Code, ba.Border.Span)
-	ba.Data = incomePercentages
+	ba.Data = calIncomePercentages(ana.Code, ba.Border.Span)
 
 	var sum float32
-	for _, ip := range incomePercentages {
+	for _, ip := range ba.Data {
 		sum += ip
 	}
 
@@ -52,11 +67,15 @@ func (ana *Analysis) borderAnalyze() {
 
 // TODO(tonyshanc): Maybe partial scope's change matters. Check partial scope's growth instead whole scope.
 func (ana *Analysis) hpmAnalyze() {
+	if ana.HPMAnalysis == nil {
+		return
+	}
+
 	ha := ana.HPMAnalysis
-	incomePercentages := calIncomePercentages(ana.Code, ha.DetectHPM.Span)
+	ha.Data = calIncomePercentages(ana.Code, ha.DetectHPM.Span)
 
 	var sum float32
-	for _, ip := range incomePercentages {
+	for _, ip := range ha.Data {
 		sum += ip
 	}
 
