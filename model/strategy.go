@@ -26,7 +26,9 @@ type MyStrategies struct {
 }
 
 type DetectHPM struct {
+	// Notice: default zero if unset.
 	Min float32 `yaml:"min"`
+	// Notice: default zero if unset.
 	Max float32 `yaml:"max"`
 }
 
